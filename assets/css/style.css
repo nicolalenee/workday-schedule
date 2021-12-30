@@ -29,6 +29,9 @@ textarea{
   text-align: center;
   border-radius: 15px;
 }
+.container{
+  overflow: scroll;
+}
 
 .row {
   white-space: pre-wrap;
