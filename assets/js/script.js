@@ -14,8 +14,7 @@ $("document").ready(function() {
 var displayTimeblock = function() {
   //create element that makes up a timeblock
   var timeBlock = $("<div>")
-  .addClass("timeblock card bg-light mb-3")
-  .text("8:00 AM");
+  .addClass("timeblock card bg-light mb-3");
 
   var cardBody = $("<div>")
   .addClass("card-body");
@@ -23,18 +22,20 @@ var displayTimeblock = function() {
 
   var cardTime = $("<h5>")
   .addClass("card-title text-dark mb-4")
-  .val("title");
+  .text("8:00 AM");
 
   var taskName = $("<h6>")
   .addClass("card-subtitle mb-2 text-muted")
-  .val("task name");
+  .text("task name");
 
   var description = $("<p>")
   .addClass("card-text text-dark")
-  .val("this is a description");
+  .text("this is a description");
 
+  //append contents to cardbody
+  cardBody.append(cardTime, taskName, description)
   //append all content to timeblock
-  timeBlock.append(cardBody, cardTime, taskName, description);
+  timeBlock.append(cardBody);
   // append to schedule div
   $("#schedule").append(timeBlock);
 }
