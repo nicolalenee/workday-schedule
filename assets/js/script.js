@@ -1,6 +1,6 @@
 // variable that holds tasks that will be saved in local storage
 var tasks = {};
-var businessHours = ["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 AM", "5:00 PM"];
+var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
 
 // display date when doc is loaded
 $("document").ready(function() {
@@ -11,32 +11,49 @@ $("document").ready(function() {
 });
 
 
+// display the timeblocks for each business hour
 var displayTimeblock = function() {
-  //create element that makes up a timeblock
-  var timeBlock = $("<div>")
-  .addClass("timeblock card bg-light mb-3");
 
-  var cardBody = $("<div>")
-  .addClass("card-body");
+  // loop that sets the hour variable and colors based on past, present, or future
+  for (var i=0; i < businessHours.length; i++) {
+    var currentTime = moment().format("h:mm A");
+    console.log("The current time is " + currentTime);
+    var time = moment.utc()
+    .hour(businessHours[i])
+    .minute(0)
+    .format("h:mm A");
+    console.log("This time block is for  " + time);
 
+    //TODO:add the if conditional that changes the color of the block depending on if it is past present or future to the current time
 
-  var cardTime = $("<h5>")
-  .addClass("card-title text-dark mb-4")
-  .text("8:00 AM");
+    //create element that makes up a timeblock in the present
+    var timeBlock = $("<div>")
+    .addClass("timeblock card bg-light mb-3");
 
-  var taskName = $("<h6>")
-  .addClass("card-subtitle mb-2 text-muted")
-  .text("task name");
+    var cardBody = $("<div>")
+    .addClass("card-body");
 
-  var description = $("<p>")
-  .addClass("card-text text-dark")
-  .text("this is a description");
+    var cardTime = $("<h5>")
+    .addClass("card-title text-dark mb-4")
+    //set time to new variable
+    .text(time);
 
-  //append contents to cardbody
-  cardBody.append(cardTime, taskName, description)
-  //append all content to timeblock
-  timeBlock.append(cardBody);
-  // append to schedule div
-  $("#schedule").append(timeBlock);
+    var taskName = $("<h6>")
+    .addClass("card-subtitle mb-2 text-muted")
+    .text("Enter new task");
+
+    var description = $("<p>")
+    .addClass("card-text text-dark")
+    .text("Enter a description of the task");
+
+    //append contents to cardbody
+    cardBody.append(cardTime, taskName, description)
+    //append all content to timeblock
+    timeBlock.append(cardBody);
+    // append to schedule div
+    $("#schedule").append(timeBlock);
+  };
 }
+
+// on ready event handler
 $(document).on("click", displayTimeblock);
