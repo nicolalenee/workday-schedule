@@ -1,13 +1,16 @@
 // variable that holds tasks that will be saved in local storage
 var tasks = {};
-var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
+var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 21, 22, 23, 24];
+ var currentTime = moment().utc().local();
 
-// display date when doc is loaded
+// display dynamic elements
 $("document").ready(function() {
-  // define date
+  // format date
   var date = moment().format('dddd, MMMM Do YYYY');
   // append to parent p
   $("#currentDay").append(date);
+  // display the timeblocks
+  displayTimeblock();
 });
 
 
@@ -16,44 +19,59 @@ var displayTimeblock = function() {
 
   // loop that sets the hour variable and colors based on past, present, or future
   for (var i=0; i < businessHours.length; i++) {
-    var currentTime = moment().format("h:mm A");
-    console.log("The current time is " + currentTime);
-    var time = moment.utc()
+
+    // set the time for the timeblock
+    var time = moment.utc().local()
     .hour(businessHours[i])
     .minute(0)
-    .format("h:mm A");
-    console.log("This time block is for  " + time);
+    .milliseconds(0);
 
-    //TODO:add the if conditional that changes the color of the block depending on if it is past present or future to the current time
+
+    // reformat to a string for display purposes
+    var timeFormat = moment(time, 'MMMM Do YYYY, h:mm:ss A').format('h:mm A');
 
     //create element that makes up a timeblock in the present
     var timeBlock = $("<div>")
     .addClass("timeblock card bg-light mb-3");
 
+    var cardHeader = $("<div>")
+    .addClass("card-header");
+
+    var cardTime = $("<h2>")
+    .addClass("card-title text-dark mb-1")
+    //set time to new variable
+    .text(`🕑 ${timeFormat}`);
+
     var cardBody = $("<div>")
     .addClass("card-body");
 
-    var cardTime = $("<h5>")
-    .addClass("card-title text-dark mb-4")
-    //set time to new variable
-    .text(time);
-
-    var taskName = $("<h6>")
+    var taskName = $("<h3>")
     .addClass("card-subtitle mb-2 text-muted")
-    .text("Enter new task");
+    .text("✏️ Click to enter a new task");
 
     var description = $("<p>")
     .addClass("card-text text-dark")
-    .text("Enter a description of the task");
+    .text("💬 Click to enter a description of the task");
 
-    //append contents to cardbody
-    cardBody.append(cardTime, taskName, description)
-    //append all content to timeblock
-    timeBlock.append(cardBody);
-    // append to schedule div
+    // variable that is nearly an hour after the timeblock start
+    var withinHour = moment(time, "h:mm").add(59, 'minutes').add(59,"milliseconds");
+
+
+    if (time.isAfter(currentTime) && withinHour.isAfter(currentTime)) {
+      // if the current time is before the time on the schedule and before the end of that hour, it's a future timeblock
+      console.log("this timeblock is in the future")
+    } else if (currentTime.isAfter(time) && currentTime < withinHour) {
+      // if the current time is after the time on the schedule and before the end of the next hour, it's a current timeblock
+      console.log("this timeblock is the current timeblock")
+    } else if (currentTime.isAfter(time) && currentTime.isAfter(withinHour)) {
+      // if the current time is after the time on the schedule and after the end of that hour, it's a past timeblock
+      console.log("this timeblock is in the past")
+
+    }
+    //append elements to page
+    cardHeader.append(cardTime);
+    cardBody.append(taskName, description)
+    timeBlock.append(cardHeader, cardBody);
     $("#schedule").append(timeBlock);
-  };
-}
-
-// on ready event handler
-$(document).on("click", displayTimeblock);
+  }
+};
