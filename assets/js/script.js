@@ -1,6 +1,6 @@
 // variable that holds tasks that will be saved in local storage
 var tasks = {};
-var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 21, 22, 23, 24];
+var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
  var currentTime = moment().utc().local();
 
 // display dynamic elements
