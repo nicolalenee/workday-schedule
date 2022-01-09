@@ -24,7 +24,7 @@ textarea{
   border-radius: 15px;
 }
 .container{
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .row {
