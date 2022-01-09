@@ -1,20 +1,3 @@
-// variable that holds tasks that will be saved in local storage
-var tasks = {};
-var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
- var currentTime = moment().utc().local();
-
-// display dynamic elements
-$("document").ready(function() {
-  // format date
-  var date = moment().format('dddd, MMMM Do YYYY');
-  // append to parent p
-  $("#currentDay").append(date);
-  // display the timeblocks
-  displayTimeblock();
-});
-
-
-// display the timeblocks for each business hour
 var displayTimeblock = function() {
 
   // loop that sets the hour variable and colors based on past, present, or future
@@ -50,16 +33,17 @@ var displayTimeblock = function() {
     // element variables
     var cardHeaderEl = $("<div>").addClass("card-header rounded mb-1");
     var hourEl = $("<h1>").text(`🕑 ${timeFormat}`);
-    var cardBodyEl = $("<div>").addClass("card-body flex-column justify-content-between");
-    var textAreaEl = $("<textarea>").addClass("rounded align-middle w-75 mr-2").text("✏️ Add a new event");
-    var saveBtnEl = $("<button>").addClass("saveBtn align-middle").text("Save");
+    var cardBodyEl = $("<div>").addClass("card-body");
+    var textAreaEl = $("<textarea>").addClass("rounded mr-5").text("Add a new event");
+    var saveBtnEl = $("<button>").addClass("saveBtn").text("Save");
     
 
     //append elements to page
-    cardBodyEl.append(textAreaEl, saveBtnEl);
-    cardHeaderEl.append(hourEl);
+    $(".container").append(timeBlockEl);
     timeBlockEl.append(cardHeaderEl, cardBodyEl);
-    $("#schedule").append(timeBlockEl);
+    cardHeaderEl.append(hourEl);
+    cardBodyEl.append(textAreaEl, saveBtnEl);
 
   }
-}
+
+};

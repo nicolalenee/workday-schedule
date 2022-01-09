@@ -5,21 +5,15 @@ body {
 }
 
 textarea{
-  background: transparent;
+  background: white;
   border: none;
   resize: none;
-  color: #000000;
-  border-left: 1px solid black;
+  color: #615f5f;
+  border: 1px solid rgb(71, 71, 71);
   padding: 10px;
+  font-style: italic;
 }
 
-.jumbotron {
-  text-align: center;
-  background-color: transparent;
-  color: black;
-  border-radius: 0;
-  border-bottom: 10px solid black;
-}
 
 .description{
   white-space: pre-wrap;
