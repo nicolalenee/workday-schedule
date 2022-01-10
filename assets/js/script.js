@@ -11,6 +11,7 @@ $("document").ready(function() {
   $("#currentDay").append(date);
   // display the timeblocks
   displayTimeblock();
+  
 });
 
 
@@ -35,31 +36,89 @@ var displayTimeblock = function() {
     // loop that styles timeblock based on past, present, or futuree
     if (time.isAfter(currentTime) && withinHour.isAfter(currentTime)) {
       // future time block
-      var timeBlockEl = $("<div>").addClass("time-block card mb-3 future");
+      var timeBlockEl = $("<div>")
+      .addClass("time-block card mb-3 future")
+      .attr("id", `hour-${timeFormat}`)
       
     } else if (currentTime.isAfter(time) && currentTime < withinHour) {
       // present time block
-      var timeBlockEl = $("<div>").addClass("time-block card mb-3 present");
+      var timeBlockEl = $("<div>").addClass("time-block card mb-3 present")
+      .attr("id",`hour-${timeFormat}`)
     
     } else if (currentTime.isAfter(time) && currentTime.isAfter(withinHour)) {
       // past time block
-      var timeBlockEl = $("<div>").addClass("time-block card mb-3 past");
+      var timeBlockEl = $("<div>").addClass("time-block card mb-3 past")
+      .attr("id", `hour-${timeFormat}`)
     }
 
 
     // element variables
-    var cardHeaderEl = $("<div>").addClass("card-header rounded mb-1");
-    var hourEl = $("<h1>").text(`🕑 ${timeFormat}`);
-    var cardBodyEl = $("<div>").addClass("card-body flex-column justify-content-between");
-    var textAreaEl = $("<textarea>").addClass("rounded align-middle w-75 mr-2").text("✏️ Add a new event");
-    var saveBtnEl = $("<button>").addClass("saveBtn align-middle").text("Save");
-    
+    var cardHeaderEl = $("<div>")
+    .addClass("card-header rounded");
 
+    var hourEl = $("<h1>")
+    .addClass("block-hour")
+    .text(`🕑 ${timeFormat}`);
+
+    var cardBodyEl = $("<div>")
+    .addClass("card-body");
+
+    var formEl = $("<form>")
+    .addClass("form-group d-flex justify-content-between")
+    .attr("id", "task-form")
+
+    var textAreaEl = $("<textarea>")
+    .addClass("rounded w-75 mr-2 task-text form-control")
+    .attr("placeholder", "✏️ Add a task here")
+    .attr("id", "text-area");
+
+    var saveBtnEl = $("<button>")
+    .addClass("saveBtn form-control w-25")
+    .attr("type", "submit")
+    .text("Save");
+    
     //append elements to page
-    cardBodyEl.append(textAreaEl, saveBtnEl);
+    formEl.append(textAreaEl, saveBtnEl)
+    cardBodyEl.append(formEl);
     cardHeaderEl.append(hourEl);
     timeBlockEl.append(cardHeaderEl, cardBodyEl);
-    $("#schedule").append(timeBlockEl);
-
+    $(".container").append(timeBlockEl);
   }
 }
+
+// load tasks
+var loadTasks = function() {
+  tasks = JSON.parse(localStorage.getItem("tasks"));
+
+  // if localStorage is empty, create a new object
+  if (!tasks) {
+    tasks = {
+      hour: [],
+      text: []
+    }
+  }
+}
+
+// save tasks
+var saveTasks = function() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+// function that allows us to edit the textarea and store the information that's entered
+$(".container").on("change", "textarea", function() {
+  var text = $(this)
+  .val()
+  .trim()
+})
+
+
+// function that stores the information in the textarea in the the localSotrage
+$(".container").on("click", "button", function() {
+  saveTasks();
+})
+
+
+
+// load tasks for the first time
+loadTasks();
+
