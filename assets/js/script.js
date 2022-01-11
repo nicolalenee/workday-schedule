@@ -11,7 +11,26 @@ $("document").ready(function() {
   $("#currentDay").append(date);
   // display the timeblocks
   displayTimeblock();
-  
+  // load tasks for the first time
+  loadTasks();
+
+
+  // button that captures the time and the text of the tasks then saves the data to the task array in local storage
+  $(".saveBtn").on("click", function() {
+    
+    // capture  textarea text 
+    var text = $(this).siblings("textarea").val();
+    
+    // grab timeblock hour
+    var hour = $(this).offsetParent().attr("id");
+
+    // get the index of the timeblock in the order of timeblocks
+    var index = $(this).closest(".time-block").index();
+
+    
+    //store the task
+    saveTasks();
+    })
 });
 
 
@@ -38,17 +57,17 @@ var displayTimeblock = function() {
       // future time block
       var timeBlockEl = $("<div>")
       .addClass("time-block card mb-3 future")
-      .attr("id", `hour-${timeFormat}`)
+      .attr("id", `${timeFormat}`)
       
     } else if (currentTime.isAfter(time) && currentTime < withinHour) {
       // present time block
       var timeBlockEl = $("<div>").addClass("time-block card mb-3 present")
-      .attr("id",`hour-${timeFormat}`)
+      .attr("id",`${timeFormat}`)
     
     } else if (currentTime.isAfter(time) && currentTime.isAfter(withinHour)) {
       // past time block
       var timeBlockEl = $("<div>").addClass("time-block card mb-3 past")
-      .attr("id", `hour-${timeFormat}`)
+      .attr("id", `${timeFormat}`)
     }
 
 
@@ -74,7 +93,7 @@ var displayTimeblock = function() {
 
     var saveBtnEl = $("<button>")
     .addClass("saveBtn form-control w-25")
-    .attr("type", "submit")
+    .attr("type", "button")
     .text("Save");
     
     //append elements to page
@@ -85,6 +104,12 @@ var displayTimeblock = function() {
     $(".container").append(timeBlockEl);
   }
 }
+
+
+ // save tasks
+ var saveTasks = function() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+};
 
 // load tasks
 var loadTasks = function() {
@@ -98,27 +123,3 @@ var loadTasks = function() {
     }
   }
 }
-
-// save tasks
-var saveTasks = function() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-};
-
-// function that allows us to edit the textarea and store the information that's entered
-$(".container").on("change", "textarea", function() {
-  var text = $(this)
-  .val()
-  .trim()
-})
-
-
-// function that stores the information in the textarea in the the localSotrage
-$(".container").on("click", "button", function() {
-  saveTasks();
-})
-
-
-
-// load tasks for the first time
-loadTasks();
-
