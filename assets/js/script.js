@@ -26,8 +26,10 @@ $("document").ready(function() {
 
     // get the index of the timeblock in the order of timeblocks
     var index = $(this).closest(".time-block").index();
-
     
+    // push information to tasks array
+    tasks[hour] = text;
+
     //store the task
     saveTasks();
     })
@@ -117,9 +119,6 @@ var loadTasks = function() {
 
   // if localStorage is empty, create a new object
   if (!tasks) {
-    tasks = {
-      hour: [],
-      text: []
-    }
+    tasks = {}
   }
 }
