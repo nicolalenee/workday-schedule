@@ -1,6 +1,7 @@
+
 // variable that holds tasks that will be saved in local storage
 var tasks = {};
-var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+var businessHours = [9, 10, 11, 12, 13, 14, 15, 16, 17];
  var currentTime = moment().utc().local();
 
 // display dynamic elements
@@ -9,35 +10,20 @@ $("document").ready(function() {
   var date = moment().format('dddd, MMMM Do YYYY');
   // append to parent p
   $("#currentDay").append(date);
+
   // display the timeblocks
   displayTimeblock();
   // load tasks for the first time
   loadTasks();
-
-
-  // button that captures the time and the text of the tasks then saves the data to the task array in local storage
-  $(".saveBtn").on("click", function() {
-    
-    // capture  textarea text 
-    var text = $(this).siblings("textarea").val();
-    
-    // grab timeblock hour
-    var hour = $(this).offsetParent().attr("id");
-
-    // get the index of the timeblock in the order of timeblocks
-    var index = $(this).closest(".time-block").index();
-    
-    // push information to tasks array
-    tasks[hour] = text;
-
-    //store the task
-    saveTasks();
-    })
+  // when reset button is clicked, all tasks will be removed from the localStorage
+  $("#reset").on("click", resetLocalStorage);
+  // when save button is clicked, task information is collected
+  $(".saveBtn").on("click", captureTaskInfo)
 });
 
 
 // display the timeblocks for each business hour
-var displayTimeblock = function() {
+var displayTimeblock = function(timeFormat, text) {
 
   // loop that sets the hour variable and colors based on past, present, or future
   for (var i=0; i < businessHours.length; i++) {
@@ -91,7 +77,8 @@ var displayTimeblock = function() {
     var textAreaEl = $("<textarea>")
     .addClass("rounded w-75 mr-2 task-text form-control")
     .attr("placeholder", "✏️ Add a task here")
-    .attr("id", "text-area");
+    .attr("id", "text-area")
+    .text(text);
 
     var saveBtnEl = $("<button>")
     .addClass("saveBtn form-control w-25")
@@ -121,4 +108,48 @@ var loadTasks = function() {
   if (!tasks) {
     tasks = {}
   }
+  /*$.each(tasks, function(hour, text) {
+    displayTimeblock(tasks.hour, tasks.text);
+  })*/
 }
+
+// function to reset localStorage data on 
+var resetLocalStorage = function() {
+  // clear tasks array
+  tasks ={};
+  // remove contents from localStorage
+  localStorage.clear();
+
+  // remove tasks from the page and replace with a blank text area
+  var taskText = $(this).parent().siblings(".container").children(".time-block").children(".card-body").children("#task-form").children("h2");
+  var newTextArea = $("<textarea>")
+  .addClass("rounded w-75 mr-2 task-text form-control")
+  .attr("placeholder", "✏️ Add a task here")
+  .attr("id", "text-area")
+  .text("");
+  taskText.replaceWith(newTextArea);
+
+};
+
+// function that captures the time and text contents of each task
+var captureTaskInfo = function() {
+  // capture  textarea text 
+  var text = $(this).siblings("textarea").val();
+    
+  // grab timeblock hour
+  var hour = $(this).offsetParent().attr("id");
+  
+  // push information to tasks array
+  tasks[hour] = text;
+  //store the task
+  saveTasks();
+
+  var taskSpan = $("<h2>")
+  .addClass("font-weight-bold")
+  .text(`✅ ${text}`)
+
+  // replace input with span element
+  $(this).siblings("textarea").replaceWith(taskSpan);
+}
+
+// TODO: make task elements available to be updated upon click
