@@ -23,7 +23,7 @@ $("document").ready(function() {
 
 
 // display the timeblocks for each business hour
-var displayTimeblock = function(timeFormat, text) {
+var displayTimeblock = function(hour, text) {
 
   // loop that sets the hour variable and colors based on past, present, or future
   for (var i=0; i < businessHours.length; i++) {
@@ -35,7 +35,7 @@ var displayTimeblock = function(timeFormat, text) {
     .milliseconds(0);
 
     // reformat to a string for display purposes
-    var timeFormat = moment(time, 'MMMM Do YYYY, h:mm:ss A').format('h:mm A');
+    var hour = moment(time, 'MMMM Do YYYY, h:mm:ss A').format('h:mm A');
     // variable that is nearly an hour after the timeblock start
     var withinHour = moment(time, "h:mm").add(59, 'minutes').add(59,"milliseconds");
 
@@ -45,17 +45,17 @@ var displayTimeblock = function(timeFormat, text) {
       // future time block
       var timeBlockEl = $("<div>")
       .addClass("time-block card mb-3 future")
-      .attr("id", `${timeFormat}`)
+      .attr("id", `${hour}`)
       
     } else if (currentTime.isAfter(time) && currentTime < withinHour) {
       // present time block
       var timeBlockEl = $("<div>").addClass("time-block card mb-3 present")
-      .attr("id",`${timeFormat}`)
+      .attr("id",`${hour}`)
     
     } else if (currentTime.isAfter(time) && currentTime.isAfter(withinHour)) {
       // past time block
       var timeBlockEl = $("<div>").addClass("time-block card mb-3 past")
-      .attr("id", `${timeFormat}`)
+      .attr("id", `${hour}`)
     }
 
 
@@ -65,7 +65,7 @@ var displayTimeblock = function(timeFormat, text) {
 
     var hourEl = $("<h1>")
     .addClass("block-hour")
-    .text(`🕑 ${timeFormat}`);
+    .text(`🕑 ${hour}`);
 
     var cardBodyEl = $("<div>")
     .addClass("card-body");
@@ -106,11 +106,12 @@ var loadTasks = function() {
 
   // if localStorage is empty, create a new object
   if (!tasks) {
-    tasks = {}
+    tasks = {hour:[]}
   }
-  /*$.each(tasks, function(hour, text) {
-    displayTimeblock(tasks.hour, tasks.text);
-  })*/
+  // TODO: for each task, display information that is saved in local storage
+  $.each(tasks, function(hour,text) {
+    displayTimeblock(hour,text);
+  })
 }
 
 // function to reset localStorage data on 
@@ -132,7 +133,7 @@ var resetLocalStorage = function() {
 };
 
 // function that captures the time and text contents of each task
-var captureTaskInfo = function() {
+var captureTaskInfo = function(hour, text) {
   // capture  textarea text 
   var text = $(this).siblings("textarea").val();
     
@@ -163,3 +164,4 @@ $(".container").on("click","h2", function() {
   // replace with new information
   $(this).replaceWith(newTextArea);
 })
+
