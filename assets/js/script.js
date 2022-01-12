@@ -152,4 +152,14 @@ var captureTaskInfo = function() {
   $(this).siblings("textarea").replaceWith(taskSpan);
 }
 
-// TODO: make task elements available to be updated upon click
+//  make task elements available to be updated upon click
+$(".container").on("click","h2", function() {
+  // create new textarea
+  var newTextArea = $("<textarea>")
+  .addClass("rounded w-75 mr-2 task-text form-control")
+  .attr("placeholder", "✏️ Add a task here")
+  .attr("id", "text-area")
+  .text($(this).text().replace("✅", "").trim());
+  // replace with new information
+  $(this).replaceWith(newTextArea);
+})
