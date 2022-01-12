@@ -21,6 +21,11 @@ Tasks are color-coded to indicate whether the hour is in the past, present, or f
 
 ## Screenshots
 
+![image](https://user-images.githubusercontent.com/86696492/149084386-5e172459-3243-4710-809a-a25607c75ad0.png)
+
+![image](https://user-images.githubusercontent.com/86696492/149084430-2b0c02d9-4f6b-409f-9754-53e2889cceb8.png)
+
+
 ## Links 
 Repository: https://github.com/nicolalenee/workday-schedule
 Deployment: https://nicolalenee.github.io/workday-schedule/
