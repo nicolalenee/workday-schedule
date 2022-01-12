@@ -115,7 +115,7 @@ var loadTasks = function() {
       divId.textContent = name;
       
       let savedTask = $(divId).val();
-      // if there is content inside of the textarea, save the persistent data and change it into an h2 display
+      // if there is content inside of the textarea, change the display from a textarea to an h2 element
       if (savedTask) {
       
         let replacementEl = $("<h2>")
