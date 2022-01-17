@@ -1,7 +1,7 @@
 # Work Day Scheduler
 
 ## Description
-A web appliucation that allows a user to enter tasks every hour during normal business hours.
+A web application that allows a user to enter tasks every hour during normal business hours.
 Tasks are color-coded to indicate whether the hour is in the past, present, or future.
 
 ## Technologies
